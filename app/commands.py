@@ -22,11 +22,16 @@ def check_command(string: str) -> None:
         case "jmp" | "jump":
             if len(strings) == 2:
                 try:
-                    errid = show_page(int(strings[1]))
+                    errid = show_page(int(strings[1]) // stack_size)
                     if errid == 0:
                         print("Type a command. Ctrl + C to exit.")
                 except ValueError:
-                    show_page(0, raise_error = 4)
+                    try:
+                        errid = show_page(int(strings[1], 16) // stack_size)
+                        if errid == 0:
+                            print("Type a command. Ctrl + C to exit.")
+                    except ValueError:
+                        show_page(0, raise_error = 4)
             else:
                 show_page(0, raise_error = 4)
         case _:
