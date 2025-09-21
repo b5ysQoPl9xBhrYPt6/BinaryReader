@@ -3,13 +3,13 @@ import colorama as clr
 clr.init()
 
 
-file:                str = r"C:\Users\Galax\Documents\Smash Hit.apk"
+file:                str = r"C:\Windows\System32\cmd.exe"
 address_size:        int = 8
 stack_size:          int = 32
 page_padding:        int = 4
 
 title:               str = 'BinaryReader'
-version:             str = 'V1.0 : commit 4 : master'
+version:             str = 'V1.0 : commit 5 : master'
 
 class Style:
     TITLE:               str = clr.Back.WHITE         + clr.Fore.BLACK
@@ -20,3 +20,4 @@ class Style:
     ERROR:               str = clr.Fore.RED           #
     BYTE_OUT_OF_BOUNDS:  str = clr.Fore.LIGHTRED_EX   #
     MESSAGE:             str = clr.Fore.LIGHTBLACK_EX #
+    INPUT:               str = clr.Fore.WHITE         #

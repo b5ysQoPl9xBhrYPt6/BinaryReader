@@ -29,13 +29,13 @@ def show_page(address_point: int = 0, raise_error: int | None = None) -> int:
             end = ' '
         )
         for bi in range(stack_size):
-            if errid == 0:
+            if errid == 0 or errid == 3 or errid == 4:
                 show_byte(address + bi)
             else:
                 print(Style.BYTE_OUT_OF_BOUNDS + '00' + clr.Fore.RESET, end = ' ')
         print(end = '\t')
         for bi in range(stack_size):
-            if errid == 0:
+            if errid == 0 or errid == 3 or errid == 4:
                 show_char(address + bi)
             else:
                 print(Style.BYTE_OUT_OF_BOUNDS + '.' + clr.Fore.RESET, end = '')
@@ -85,13 +85,13 @@ def show_stack_info_bar() -> None:
     print(clr.Back.RESET, end = '')
     print(end = '\t')
 
-    filename = os.path.basename(file)
-    if len(filename) > stack_size - 3:
-        filename = filename[:stack_size-3] + '...'
-    blank = ''.join([' ' for _ in range(stack_size // 2 - len(filename) // 2)])
+    fileinfo = f'File size: {os.path.getsize(file) / 1024} KB'
+    if len(fileinfo) > stack_size - 3:
+        fileinfo = fileinfo[:stack_size-3] + '...'
+    blank = ''.join([' ' for _ in range(stack_size // 2 - len(fileinfo) // 2)])
     print(
         Style.FILE_NAME
-        + blank + filename + ''.join([' ' for _ in range(stack_size - len(blank + filename))])
+        + blank + fileinfo + ''.join([' ' for _ in range(stack_size - len(blank + fileinfo))])
         + clr.Back.RESET,
         end = ''
     )
