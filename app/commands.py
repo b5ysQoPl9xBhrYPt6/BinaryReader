@@ -17,6 +17,7 @@ def run() -> None:
         check_command(command)
         
 def check_command(string: str) -> None:
+    string = string.lower()
     strings = string.split(' ')
     match strings[0]:
         case "jmp" | "jump":

@@ -9,14 +9,12 @@ stack_size:          int = 32
 page_padding:        int = 4
 
 title:               str = 'BinaryReader'
-version:             str = 'V1.0'
+version:             str = 'V1.0 : commit 3 : master'
 
-
-def get_binary_hex_data(file: str) -> list[str]:
-    with open(file, 'rb') as f:
-        data = f.read()
-
-    bytearr: list[str] = []
-    for byte in data:
-        bytearr.append(f'{ord(str(chr(byte))):02x}'.upper())
-    return bytearr
+class Style:
+    TITLE:               str = clr.Back.WHITE         + clr.Fore.BLACK
+    ADDRESS_BLANK:       str = clr.Back.LIGHTBLACK_EX #
+    STACK_BYTE_NUM:      str = clr.Back.BLUE          + clr.Fore.BLACK
+    FILE_NAME:           str = clr.Back.LIGHTWHITE_EX + clr.Fore.BLACK
+    ADDRESS:             str = clr.Back.BLUE          + clr.Fore.WHITE
+    ERROR:               str = clr.Fore.RED           #
