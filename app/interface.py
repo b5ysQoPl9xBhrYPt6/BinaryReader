@@ -32,29 +32,29 @@ def show_page(address_point: int = 0, raise_error: int | None = None) -> int:
             if errid == 0:
                 show_byte(address + bi)
             else:
-                print('00', end = ' ')
+                print(Style.BYTE_OUT_OF_BOUNDS + '00' + clr.Fore.RESET, end = ' ')
         print(end = '\t')
         for bi in range(stack_size):
             if errid == 0:
                 show_char(address + bi)
             else:
-                print('.', end = '')
+                print(Style.BYTE_OUT_OF_BOUNDS + '.' + clr.Fore.RESET, end = '')
         print()
 
     match errid:
         case 1:
             print(Style.ERROR + "Error: Address out of bounds.", clr.Fore.RESET)
         case 2:
-            print(Style.ERROR + "Error: Address cannot be negative.", clr.Fore.RESET)
+            print(Style.ERROR + "Error: No message available.", clr.Fore.RESET)
         case 3:
             print(Style.ERROR + "Error: Invalid command. Type 'help' to get a command list.", clr.Fore.RESET)
         case 4:
             print(Style.ERROR + "Error: Invalid command arguments. Type 'help' to get a command list.", clr.Fore.RESET)
         
         case 0:
-            pass
+            print(Style.MESSAGE + "Type a command. Ctrl + C to exit.")
         case _:
-            print(clr.Fore.RED + "Error: Unknown error.", clr.Fore.RESET)
+            print(Style.ERROR + "Error: Unknown error.", clr.Fore.RESET)
 
     return errid
 
@@ -63,13 +63,13 @@ def show_char(char_index: int) -> None:
         char = chr(int(reader.get_byte(char_index), 16))
         print(char if char.isprintable() else '.', end = '')
     except IndexError:
-        print('.', end = '')
+        print(Style.BYTE_OUT_OF_BOUNDS + '.' + clr.Fore.RESET, end = '')
 
 def show_byte(byte_index: int) -> None:
     try:
         print(reader.get_byte(byte_index), end = ' ')
     except IndexError:
-        print('00', end = ' ')
+        print(Style.BYTE_OUT_OF_BOUNDS + '00' + clr.Fore.RESET, end = ' ')
 
 def show_stack_info_bar() -> None:
     print(
@@ -86,6 +86,8 @@ def show_stack_info_bar() -> None:
     print(end = '\t')
 
     filename = os.path.basename(file)
+    if len(filename) > stack_size - 3:
+        filename = filename[:stack_size-3] + '...'
     blank = ''.join([' ' for _ in range(stack_size // 2 - len(filename) // 2)])
     print(
         Style.FILE_NAME
