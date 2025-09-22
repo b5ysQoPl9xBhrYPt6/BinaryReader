@@ -9,7 +9,7 @@ stack_size:          int = 32
 page_padding:        int = 4
 
 title:               str = 'BinaryReader'
-version:             str = 'V1.0 : commit 5 : master'
+version:             str = 'V1.0 : commit 7 : master'
 
 class Style:
     TITLE:               str = clr.Back.WHITE         + clr.Fore.BLACK
@@ -21,3 +21,4 @@ class Style:
     BYTE_OUT_OF_BOUNDS:  str = clr.Fore.LIGHTRED_EX   #
     MESSAGE:             str = clr.Fore.LIGHTBLACK_EX #
     INPUT:               str = clr.Fore.WHITE         #
+    SELECTED_BYTE:       str = clr.Fore.YELLOW         #

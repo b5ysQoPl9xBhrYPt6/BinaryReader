@@ -3,7 +3,8 @@ from .reset import *
 from .commands import *
 import sys, os, colorama as clr
 
-current_address: int = 0
+current_address:  int = 0
+selected_address: int = -1
 
 def run() -> None:
     reset()
@@ -25,15 +26,31 @@ def run() -> None:
             print(Style.ERROR + "Error: Terminal window is too small. Resize your window and type 'reload'." + clr.Fore.RESET)
         
 def check_command(string: str) -> None:
-    global current_address
+    global current_address, selected_address
     string = string.lower()
     strings = string.split(' ')
     match strings[0]:
         case "jmp" | "jump":
-            address = jmp_command(strings)
+            address = jmp_command(strings, selected_address = selected_address)
             if address is not None:
                 current_address = address
         case "reload":
-            reload_command(current_address)
+            reload_command(current_address, selected_address = selected_address)
+        case "move" | "mv":
+            result = move_command(strings, current_address, strings[1], selected_address = selected_address)
+            if result is not None:
+                current_address = result
+        case "select" | "sel":
+            success = select_command(strings, current_address)
+            if success:
+                try:
+                    selected_address = int(strings[1])
+                    show_page(current_address, selected_address = selected_address)
+                except ValueError:
+                    selected_address = int(strings[1], 16)
+                    show_page(current_address, selected_address = selected_address)
+        case "done":
+            selected_address = -1
+            show_page(current_address)
         case _:
             show_page(current_address, raise_error = 3)

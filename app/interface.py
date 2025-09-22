@@ -6,9 +6,9 @@ print('Loading your file...')
 reader = BufferedHexReader(file, buffer_size = 8192)
 
 
-def show_page(address_point: int = 0, raise_error: int | None = None) -> int:
-    show_app_bar()
-    show_stack_info_bar()
+def show_page(address_point: int = 0, raise_error: int | None = None, selected_address: int | None = None) -> int:
+    _show_app_bar()
+    _show_stack_info_bar()
     errid = 0
     if address_point < 0:
         errid = 2
@@ -30,13 +30,19 @@ def show_page(address_point: int = 0, raise_error: int | None = None) -> int:
         )
         for bi in range(stack_size):
             if errid == 0 or errid == 3 or errid == 4:
-                show_byte(address + bi)
+                if selected_address is not None and address == selected_address:
+                    _show_byte(address + bi, selected = True)
+                else:
+                    _show_byte(address + bi)
             else:
                 print(Style.BYTE_OUT_OF_BOUNDS + '00' + clr.Fore.RESET, end = ' ')
         print(end = '\t')
         for bi in range(stack_size):
             if errid == 0 or errid == 3 or errid == 4:
-                show_char(address + bi)
+                if selected_address is not None and address == selected_address:
+                    _show_char(address + bi, selected = True)
+                else:
+                    _show_char(address + bi)
             else:
                 print(Style.BYTE_OUT_OF_BOUNDS + '.' + clr.Fore.RESET, end = '')
         print()
@@ -58,20 +64,26 @@ def show_page(address_point: int = 0, raise_error: int | None = None) -> int:
 
     return errid
 
-def show_char(char_index: int) -> None:
+def _show_char(char_index: int, selected: bool = False) -> None:
     try:
         char = chr(int(reader.get_byte(char_index), 16))
+        if selected:
+            print(Style.SELECTED_BYTE, end = '')
         print(char if char.isprintable() else '.', end = '')
+        print(clr.Fore.RESET, end = '')
     except IndexError:
         print(Style.BYTE_OUT_OF_BOUNDS + '.' + clr.Fore.RESET, end = '')
 
-def show_byte(byte_index: int) -> None:
+def _show_byte(byte_index: int, selected: bool = False) -> None:
     try:
+        if selected:
+            print(Style.SELECTED_BYTE, end = '')
         print(reader.get_byte(byte_index), end = ' ')
+        print(clr.Fore.RESET, end = '')
     except IndexError:
         print(Style.BYTE_OUT_OF_BOUNDS + '00' + clr.Fore.RESET, end = ' ')
 
-def show_stack_info_bar() -> None:
+def _show_stack_info_bar() -> None:
     print(
         Style.ADDRESS_BLANK
         + ''.join([' ' for _ in range(address_size + 2)])
@@ -97,7 +109,7 @@ def show_stack_info_bar() -> None:
     )
     print()
 
-def show_app_bar() -> None:
+def _show_app_bar() -> None:
     active_console_width: int = address_size + 2 + (stack_size * 3) + 6 + stack_size
     blank = ''.join([' ' for _ in range(active_console_width // 2 - len(title) // 2)])
     blank_version = ''.join([' ' for _ in range(active_console_width // 2 - len(title) // 2 - len(version))])
